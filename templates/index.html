@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Smart Polytechnic Tutor</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="top-bar">
+            <div class="brand-section">
+                <div class="brand-icon">AI</div>
+                <div class="brand-text">
+                    <h1>AI Smart Polytechnic Tutor</h1>
+                    <p class="subtitle">Your syllabus-based smart learning assistant</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-panel">
+            <div class="chat-header">
+                <div class="chat-status">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Tutor Online</span>
+                </div>
+                <div class="chat-label">Ask anything from your syllabus</div>
+            </div>
+
+            <div id="chatBox" class="chat-box"></div>
+        </div>
+
+        <div class="input-panel">
+            <div class="input-area">
+                <input id="question" type="text" placeholder="Type your question here...">
+
+                <button onclick="startVoice()" title="Ask by Voice">🎤</button>
+                <button onclick="askAI()" title="Send Question">Send</button>
+                <button onclick="downloadNotes()" title="Extract Current Chat Notes">📄 Extract Notes</button>
+            </div>
+
+            <div class="bottom-hint">
+                Press <b>Enter</b> to send • Use <b>🎤</b> for voice input • Use <b>🔊 Play</b> under any answer to hear it
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
