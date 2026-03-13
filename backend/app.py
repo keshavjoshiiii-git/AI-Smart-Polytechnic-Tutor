@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from groq import Groq
-from syllabus import SYLLABUS
+from backend.syllabus import SYLLABUS
 
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
 CORS(app)
