@@ -8,15 +8,43 @@ input.addEventListener("keypress", function(event){
 
 function stopSpeech(){
     window.speechSynthesis.cancel();
+   
+}
+window.speechSynthesis.onvoiceschanged = () => {
+    window.speechSynthesis.getVoices();
+};
+
+function cleanText(text){
+    return text
+        .replace(/\*/g, "")
+        .replace(/_/g, "")
+        .replace(/#/g, "")
+        .replace(/`/g, "")
+        .replace(/\n/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
 }
 
 function speakText(text){
     stopSpeech();
 
-    let speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "HI-IN";
-    speech.rate = 1;
+    let speech = new SpeechSynthesisUtterance();
+    speech.text = cleanText(text);
+    speech.rate = 0.95;
     speech.pitch = 1;
+    speech.volume = 1;
+
+    let voices = window.speechSynthesis.getVoices();
+
+    let selectedVoice =
+        voices.find(v => v.name.includes("Google UK English Female")) ||
+        voices.find(v => v.name.includes("Google US English")) ||
+        voices.find(v => v.lang === "en-IN") ||
+        voices[0];
+
+    if(selectedVoice){
+        speech.voice = selectedVoice;
+    }
 
     window.speechSynthesis.speak(speech);
 }
@@ -111,7 +139,7 @@ async function askAI(){
 function startVoice(){
     let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 
-    recognition.lang = "en-US";
+    recognition.lang = "en-IN";
     recognition.start();
 
     recognition.onresult = function(event){
