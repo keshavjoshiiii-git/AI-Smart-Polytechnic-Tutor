@@ -39,13 +39,17 @@ function speakText(text, selectedLanguage){
 
     let voices = window.speechSynthesis.getVoices();
 
-    if(selectedLanguage === "english"){
-        speech.lang = "en-US";
-        speech.voice =
-            voices.find(v => v.lang === "en-US") ||
-            voices.find(v => v.name.includes("Google US English")) ||
-            voices[0];
-    }
+   if(selectedLanguage === "english"){
+    speech.lang = "en-US";
+
+    speech.voice =
+        voices.find(v => v.name.toLowerCase().includes("female")) ||
+        voices.find(v => v.name.includes("Google UK English Female")) ||
+        voices.find(v => v.name.includes("Microsoft Zira")) ||
+        voices.find(v => v.name.includes("Samantha")) ||
+        voices.find(v => v.lang === "en-US") ||
+        voices[0];
+}
     else if(selectedLanguage === "hindi"){
         speech.lang = "hi-IN";
         speech.voice =
@@ -53,15 +57,18 @@ function speakText(text, selectedLanguage){
             voices.find(v => v.name.includes("Hindi")) ||
             voices[0];
     }
-    else{
-        // Hinglish
-        speech.lang = "en-IN";
-        speech.voice =
-            voices.find(v => v.lang === "en-IN") ||
-            voices.find(v => v.name.includes("Google UK English Female")) ||
-            voices.find(v => v.name.includes("Google US English")) ||
-            voices[0];
-    }
+   else{
+    // Hinglish
+    speech.lang = "en-IN";
+
+    speech.voice =
+        voices.find(v => v.name.toLowerCase().includes("female")) ||
+        voices.find(v => v.name.includes("Google UK English Female")) ||
+        voices.find(v => v.name.includes("Microsoft Zira")) ||
+        voices.find(v => v.name.includes("Samantha")) ||
+        voices.find(v => v.lang === "en-IN") ||
+        voices[0];
+}
 
     window.speechSynthesis.speak(speech);
 
