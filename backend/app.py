@@ -40,16 +40,30 @@ def ask():
     try:
         data = request.json
         question = data.get("question")
+       selected_language = data.get("language", "hinglish")
 
-        chat_completion = client.chat.completions.create(
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": question}
-            ],
-            model="llama-3.1-8b-instant",
-            temperature=0.3
-            
-        )
+language_instruction = ""
+
+if selected_language == "english":
+    language_instruction = "Answer only in simple English."
+
+elif selected_language == "hindi":
+    language_instruction = "Answer only in simple Hindi using Devanagari script."
+
+else:
+    language_instruction = "Answer only in simple Hinglish using Roman script."
+
+chat_completion = client.chat.completions.create(
+    messages=[
+        {
+            "role": "system",
+            "content": SYSTEM_PROMPT + "\n\n" + language_instruction
+        },
+        {"role": "user", "content": question}
+    ],
+    model="llama-3.1-8b-instant",
+    temperature=0.2
+)
 
         answer = chat_completion.choices[0].message.content
         answer = answer.replace("**", "").replace("*", "")

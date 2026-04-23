@@ -1,4 +1,5 @@
 let input = document.getElementById("question");
+let languageSelect = document.getElementById("languageSelect");
 
 input.addEventListener("keypress", function(event){
     if(event.key === "Enter"){
@@ -25,10 +26,12 @@ function cleanText(text){
         .trim();
 }
 
-function speakText(text){
+function speakText(text, selectedLanguage){
+
     stopSpeech();
 
     let speech = new SpeechSynthesisUtterance();
+
     speech.text = cleanText(text);
     speech.rate = 0.95;
     speech.pitch = 1;
@@ -36,22 +39,38 @@ function speakText(text){
 
     let voices = window.speechSynthesis.getVoices();
 
-    let selectedVoice =
-        voices.find(v => v.name.includes("Google UK English Female")) ||
-        voices.find(v => v.name.includes("Google US English")) ||
-        voices.find(v => v.lang === "en-IN") ||
-        voices[0];
-
-    if(selectedVoice){
-        speech.voice = selectedVoice;
+    if(selectedLanguage === "english"){
+        speech.lang = "en-US";
+        speech.voice =
+            voices.find(v => v.lang === "en-US") ||
+            voices.find(v => v.name.includes("Google US English")) ||
+            voices[0];
+    }
+    else if(selectedLanguage === "hindi"){
+        speech.lang = "hi-IN";
+        speech.voice =
+            voices.find(v => v.lang === "hi-IN") ||
+            voices.find(v => v.name.includes("Hindi")) ||
+            voices[0];
+    }
+    else{
+        // Hinglish
+        speech.lang = "en-IN";
+        speech.voice =
+            voices.find(v => v.lang === "en-IN") ||
+            voices.find(v => v.name.includes("Google UK English Female")) ||
+            voices.find(v => v.name.includes("Google US English")) ||
+            voices[0];
     }
 
     window.speechSynthesis.speak(speech);
+
 }
 
 async function askAI(){
 
     let question = input.value;
+    let selectedLanguage = languageSelect.value;
 
     if(question.trim() === "") return;
 
@@ -77,7 +96,10 @@ async function askAI(){
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({question: question})
+           body:JSON.stringify({
+    question: question,
+    language: selectedLanguage
+})
         });
 
         let data = await response.json();
@@ -105,7 +127,7 @@ async function askAI(){
         playBtn.className = "voice-btn";
         playBtn.innerText = "🔊 Play";
         playBtn.onclick = function(){
-            speakText(aiMsg.innerText);
+           speakText(aiMsg.innerText, languageSelect.value);
         };
 
         let stopBtn = document.createElement("button");
@@ -139,7 +161,15 @@ async function askAI(){
 function startVoice(){
     let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 
+    if(languageSelect.value === "english"){
+    recognition.lang = "en-US";
+}
+else if(languageSelect.value === "hindi"){
+    recognition.lang = "hi-IN";
+}
+else{
     recognition.lang = "en-IN";
+}
     recognition.start();
 
     recognition.onresult = function(event){
